@@ -24,8 +24,14 @@ function solve(varName,equation){
     if(op=="+"){
       equation[2]=["-",side2,side12];
     }
+    if(op=="-"){
+      equation[2]=["+",side2,side12];
+    }
     if(op=="*"){
       equation[2]=["/",side2,side12];
+    }
+    if(op=="/"){
+      equation[2]=["*",side2,side12];
     }
     if(op=="^"){
       equation[2]=["^",side2,["/",1,side12]];
@@ -39,8 +45,14 @@ function solve(varName,equation){
     if(op=="+"){
       equation[2]=["-",side2,side11];
     }
+    if(op=="-"){
+      equation[2]=["+",side2,side11];
+    }
     if(op=="*"){
       equation[2]=["/",side2,side11];
+    }
+    if(op=="/"){
+      equation[2]=["*",side2,side11];
     }
     if(op=="^"){
       equation[2]=["^",side2,["/",1,side11]];
@@ -49,7 +61,8 @@ function solve(varName,equation){
 
   }
 
-  return simplify(equation);
+
+  return solve(varName,equation);
 }
 
 //Simplifies Expressions if possible
@@ -88,6 +101,17 @@ function simplify(equation){
 
   }
 
+  //Identity
+  if(op=="*"){
+    if(arg1==1){
+      return arg2;
+    }
+    if(arg2==1){
+      return arg1;
+    }
+  }
+
+
   //Simplify with a variable one level below
   if(arg1.constructor===String){
     var tempVar=arg1;
@@ -109,6 +133,7 @@ function simplify(equation){
     }
 
     if(op=="*"){
+
       if(lop=="*"){
         if(larg1==tempVar){
           return [lop,["^",tempVar,2],larg2];
@@ -227,6 +252,12 @@ function simplify(equation){
   }
 
 
+  if(op=="/"){
+    if(compare(arg1,arg2)){
+      return 1;
+    }
+  }
+
   return equation;
 }
 
@@ -287,4 +318,11 @@ function contains(equation,varName){
     return true;
   }
   return false;
+}
+
+
+//Checks if equations are equal
+function compare(eq1,eq2){
+  console.log(JSON.stringify(eq1)==JSON.stringify(eq2));
+  JSON.stringify(eq1)==JSON.stringify(eq2);
 }
